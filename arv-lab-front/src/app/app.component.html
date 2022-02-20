@@ -1,0 +1,84 @@
+<div
+  class="my-10 mx-auto w-5/6 md:w-96 shadow-xl py-4 px-4"
+  (click)="onClickAppHandler()"
+>
+  <h1 class="text-center text-3xl font-semibold mb-8">TODO</h1>
+
+  <div class="text-center mb-6">
+    <input
+      type="text"
+      class="form-input w-full text-base px-2 py-1 border-1 border-slate-200 shadow-inner"
+      [(ngModel)]="addInputData"
+      (keyup)="onKeyupAddInputHandler($event)"
+      [disabled]="isEditMode"
+      placeholder="New Task"
+    />
+  </div>
+
+  <div class="shadow-md divide-y divide-slate-100">
+    <div
+      *ngFor="let item of filteredList; trackBy: trackByID; let i = index"
+      class="flex p-4 items-center"
+    >
+      <div class="flex-none basis-4 pr-4">
+        <span class="cursor-pointer" (click)="onClickChangeStatusHandler(item)">
+          <i class="fa-regular fa-square" *ngIf="!item.isDone"></i>
+          <i class="fa-regular fa-square-check" *ngIf="item.isDone"></i>
+        </span>
+      </div>
+      <div class="flex-1">
+        <input
+          type="text"
+          name="edit-input"
+          class="form-input w-full text-base px-2 py-1 border-1 border-slate-200 shadow-inner"
+          [(ngModel)]="editInputData"
+          (keyup)="onKeyupEditInputHandler($event)"
+          placeholder="Update Task"
+          *ngIf="isEditMode && i == editIndex"
+        />
+        <div
+          *ngIf="!isEditMode || (isEditMode && i !== editIndex)"
+          (click)="onClickedItemHandler(i, $event)"
+          [class.line-through]="item.isDone"
+          [class.text-slate-300]="item.isDone"
+        >
+          {{ item.text }}
+        </div>
+      </div>
+
+      <div class="flex-none basis-4 pl-4">
+        <button
+          type="button"
+          class="rounded-full border-1 bg-teal-300 hover:bg-teal-200 w-8 h-8"
+          (click)="onClickDeleteHandler(item)"
+        >
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-right mt-4">
+    <button
+      class="rounded-full text-sm cursor-pointer bg-teal-300 hover:bg-teal-200 px-3"
+      (click)="onToggleDisplayModeHandler()"
+    >
+      <ng-container *ngIf="displayMode === 'todo'">Show all</ng-container>
+      <ng-container *ngIf="!displayMode">Show Todo</ng-container>
+    </button>
+
+    <button
+      class="rounded-full text-sm cursor-pointer bg-teal-300 hover:hover:bg-teal-200 px-3 ml-3"
+      (click)="onClickDeleteDoneHandler()"
+    >
+      Delete Done
+    </button>
+
+    <button
+      class="rounded-full text-sm cursor-pointer bg-teal-300 hover:hover:bg-teal-200 px-3 ml-3"
+      (click)="onClickDeleteAllHandler()"
+    >
+      Delete All
+    </button>
+  </div>
+</div>
